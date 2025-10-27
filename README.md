@@ -1,5 +1,5 @@
 
-# R ML Project - Auto-generated
+# R ML Project 
 Dataset: 17a3bd4d-02ce-4900-a989-a8a31e98e669.csv
 Rows: 5000, Columns: 14
 Detected target column: **target**
@@ -19,3 +19,5 @@ Problem type: **classification**
    - `scripts/data_cleaning.R`
    - `scripts/eda.R`
    - `scripts/model_building.R`
+
+added visualizations for every feature depicting their importance over the result 
