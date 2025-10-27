@@ -1,0 +1,5 @@
+Rows: 5000
+Columns: 14
+Detected target: target
+Unique values in target (2): ['1.0', '0.0']
+Problem type: classification

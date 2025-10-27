@@ -1,0 +1,26 @@
+{
+    "id": "10FC16BB",
+    "path": "E:/r_project/R_ML_Project/scripts/data_cleaning.R",
+    "project_path": "scripts/data_cleaning.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1761386537656.0,
+    "source_on_save": false,
+    "relative_order": 3,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "33,17",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1761386641,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1761386641619,
+    "read_only": false,
+    "read_only_alternatives": []
+}

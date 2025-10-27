@@ -1,0 +1,26 @@
+{
+    "id": "00522164",
+    "path": "E:/r_project/R_ML_Project/scripts/data_import.R",
+    "project_path": "scripts/data_import.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1761386422999.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "20,0",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1761386493,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1761386493075,
+    "read_only": false,
+    "read_only_alternatives": []
+}

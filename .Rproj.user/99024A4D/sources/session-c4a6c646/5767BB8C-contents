@@ -1,0 +1,108 @@
+# =========================================================
+# Enhanced EDA Script with Interactive Visualizations
+# =========================================================
+
+# Load required libraries
+packages <- c("tidyverse", "plotly", "GGally", "ggcorrplot", "htmlwidgets")
+installed <- rownames(installed.packages())
+for (p in packages) {
+  if (!(p %in% installed)) install.packages(p, dependencies = TRUE)
+}
+lapply(packages, library, character.only = TRUE)
+
+# Create output directory
+if (!dir.exists("data/visuals")) dir.create("data/visuals", recursive = TRUE)
+
+# Load cleaned dataset
+df_clean <- readRDS("data/df_clean.rds")
+
+# Identify variable types
+num_cols <- names(df_clean)[sapply(df_clean, is.numeric)]
+cat_cols <- names(df_clean)[sapply(df_clean, is.factor) | sapply(df_clean, is.character)]
+target_col <- names(df_clean)[grepl("target", names(df_clean), ignore.case = TRUE)][1]
+
+# =========================================================
+# 1️⃣ Target distribution (interactive bar chart)
+# =========================================================
+if (!is.null(target_col)) {
+  p1 <- df_clean %>%
+    count(!!sym(target_col)) %>%
+    plot_ly(x = ~get(target_col), y = ~n, type = 'bar',
+            marker = list(color = 'steelblue')) %>%
+    layout(title = paste("Target Distribution -", target_col),
+           xaxis = list(title = target_col),
+           yaxis = list(title = "Count"))
+  htmlwidgets::saveWidget(p1, "data/visuals/target_distribution.html")
+}
+
+# =========================================================
+# 2️⃣ Numeric variable histograms
+# =========================================================
+for (col in num_cols) {
+  p <- plot_ly(df_clean, x = ~get(col), type = "histogram",
+               marker = list(color = 'tomato')) %>%
+    layout(title = paste("Distribution of", col),
+           xaxis = list(title = col),
+           yaxis = list(title = "Frequency"))
+  htmlwidgets::saveWidget(p, paste0("data/visuals/hist_", col, ".html"))
+}
+
+# =========================================================
+# 3️⃣ Boxplots by target (if target exists)
+# =========================================================
+if (!is.null(target_col)) {
+  for (col in num_cols) {
+    p <- plot_ly(df_clean, y = ~get(col), color = ~as.factor(df_clean[[target_col]]),
+                 type = "box") %>%
+      layout(title = paste("Boxplot of", col, "by", target_col),
+             yaxis = list(title = col))
+    htmlwidgets::saveWidget(p, paste0("data/visuals/box_", col, ".html"))
+  }
+}
+
+# =========================================================
+# 4️⃣ Bar plots for categorical variables
+# =========================================================
+for (col in cat_cols) {
+  if (length(unique(df_clean[[col]])) < 25) {
+    p <- df_clean %>%
+      count(!!sym(col)) %>%
+      plot_ly(x = ~get(col), y = ~n, type = 'bar',
+              marker = list(color = 'mediumpurple')) %>%
+      layout(title = paste("Category Count -", col),
+             xaxis = list(title = col),
+             yaxis = list(title = "Count"))
+    htmlwidgets::saveWidget(p, paste0("data/visuals/bar_", col, ".html"))
+  }
+}
+
+# =========================================================
+# 5️⃣ Correlation heatmap (numeric only)
+# =========================================================
+if (length(num_cols) > 1) {
+  corr_mat <- cor(df_clean[num_cols], use = "pairwise.complete.obs")
+  p_corr <- plot_ly(z = corr_mat, x = colnames(corr_mat), y = colnames(corr_mat),
+                    type = "heatmap", colors = colorRamp(c("darkred", "white", "darkblue"))) %>%
+    layout(title = "Correlation Heatmap")
+  htmlwidgets::saveWidget(p_corr, "data/visuals/correlation_heatmap.html")
+}
+
+# =========================================================
+# 6️⃣ Pairwise scatter matrix (first 5 numeric columns)
+# =========================================================
+if (length(num_cols) > 1) {
+  p_pairs <- GGally::ggpairs(df_clean[, head(num_cols, 5)]) +
+    ggplot2::theme_minimal()
+  html_p <- plotly::ggplotly(p_pairs)
+  htmlwidgets::saveWidget(html_p, "data/visuals/pairwise_scatter.html")
+}
+
+# =========================================================
+# Summary Statistics
+# =========================================================
+summary_stats <- df_clean %>% summary()
+capture.output(summary_stats, file = "data/summary_stats.txt")
+
+cat("✅ Interactive EDA completed successfully!\n")
+cat("📂 Check your visualizations in: data/visuals/\n")
+cat("📊 Summary statistics saved in: data/summary_stats.txt\n")
