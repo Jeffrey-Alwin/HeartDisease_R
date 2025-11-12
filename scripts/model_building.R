@@ -1,10 +1,4 @@
 
-# Auto-generated R project script
-# Dataset: 17a3bd4d-02ce-4900-a989-a8a31e98e669.csv
-# Rows: 5000, Columns: 14
-# Detected target column: 'target'
-# Problem type: regression
-
 library(tidyverse)
 library(caret)
 library(recipes)
